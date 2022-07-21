@@ -42,5 +42,8 @@ def response_decorator(f):
 
 
 def get_ntp_tx() -> str:
-    response = ntp_client.request(config.NTP_SERVER, version=3)
+    try:
+        response = ntp_client.request(config.NTP_SERVER, version=3, timeout=1)
+    except ntplib.NTPException:
+        return 'Failed to get ntp server time'
     return str(response.tx_time)
