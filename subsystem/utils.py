@@ -6,6 +6,7 @@ from flask import jsonify, request
 from pytz import timezone
 
 from . import config
+from .exceptions import TaicsException
 
 ntp_client = ntplib.NTPClient()
 
@@ -15,7 +16,10 @@ def response_decorator(f):
         if config.IS_TESTING:
             recv_time = get_ntp_tx()
 
-        result = f(*arg, **args)
+        try:
+            result = f(*arg, **args)
+        except TaicsException as e:
+            result = e.response()
 
         if type(result) is dict:
             result.update({
