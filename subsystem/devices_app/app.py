@@ -6,6 +6,7 @@ from datetime import datetime
 from flask import Blueprint
 
 from ..db import models
+from ..exceptions import InvalidParameterError, TaicsException
 from ..utils import response_decorator
 
 devices_app = Blueprint('devices', __name__)
@@ -26,7 +27,19 @@ def devices_list():
 @devices_app.route('/<string:device_ids>/value', methods=['GET'], endpoint='get')
 @response_decorator
 def devices_get_value(device_ids):
-    return {'value': random.random()}
+    devices = []
+    for id in list(map(lambda x: x.strip(), device_ids.split(','))):
+        device_record = models.Device.query.filter_by(ID=id).first()
+        if not device_record:
+            raise TaicsException([
+                InvalidParameterError(f'{id} not found')
+            ])
+        devices.append(device_record.export_values())
+
+    return {
+        'kind': 'Device',
+        'devices': devices,
+    }
 
 
 @devices_app.route('/<string:device_ids>/value', methods=['POST'], endpoint='post')
