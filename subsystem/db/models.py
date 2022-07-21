@@ -1,5 +1,8 @@
-from . import db
+import random
+
 from sqlalchemy.sql import func
+
+from . import db
 
 
 class TimestampMixin():
@@ -64,8 +67,15 @@ class Device(DictMixin, TimestampMixin, db.Model):
     def meta(self) -> dict:
         return self.to_dict(['vendor', 'model', 'SN', 'fmwVer', 'appVer', 'URL', 'spec'])
 
+    @property
+    def values(self) -> dict:
+        return {p.shortName: random.random() for p in self.properties}
+
     def export(self) -> dict:
         return self.to_dict(['ID', 'tag', 'desc', 'type', 'loc', 'meta'])
+
+    def export_values(self) -> dict:
+        return self.to_dict(['ID', 'tag', 'values'])
 
 
 class Property(DictMixin, TimestampMixin, db.Model):
