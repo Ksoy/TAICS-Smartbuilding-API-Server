@@ -1,0 +1,12 @@
+*~
+*.tmp
+*.sw[op]
+*.py[co]
+*.db
+*.egg-info
+.DS_Store
+.coverage
+._*
+.env
+__pycache__
+venv

@@ -1,0 +1,75 @@
+import json
+
+from flask import Flask
+from flask import jsonify
+
+from . import config
+from .devices_app import devices_app
+from .db import db
+from .db import models
+
+
+def start_server():
+    config.read_config()
+    app = Flask(__name__)
+
+    @app.route("/")
+    def index():
+        res = jsonify({'text': "Hello World!"})
+        return res
+
+    app.register_blueprint(devices_app, url_prefix='/devices')
+
+    # Configure Flask-SQLAlchemy
+    # Ref: https://tinyurl.com/26dbers4
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{config.BASE_DIR}/sqlite.db'
+    # Ref: https://tinyurl.com/9umn83fe
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+        if models.Device.query.count() == 0:
+            init_db()
+
+    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+
+
+def init_db():
+    with open(f'{config.BASE_DIR}/devices.json') as f:
+        devices = json.loads(f.read())
+
+    for d in devices:
+        new_device = models.Device(
+            ID=d.get('ID'),
+            kind=d.get('d.kind'),
+            tag=d.get('d.tag'),
+            desc=d.get('desc'),
+            type=d.get('type'),
+            locName=d.get('loc', {}).get('locName'),
+            locDesc=d.get('loc', {}).get('locDesc'),
+            lat=d.get('loc', {}).get('lat'),
+            lon=d.get('loc', {}).get('lon'),
+            elev=d.get('loc', {}).get('elev'),
+            roomTag=d.get('loc', {}).get('roomTag'),
+            floorTag=d.get('loc', {}).get('floorTag'),
+            spaceTag=d.get('loc', {}).get('spaceTag'),
+            vendor=d.get('meta', {}).get('vendor'),
+            model=d.get('meta', {}).get('model'),
+            SN=d.get('meta', {}).get('SN'),
+            fmwVer=d.get('meta', {}).get('fmwVer'),
+            appVer=d.get('meta', {}).get('appVer'),
+            URL=d.get('meta', {}).get('URL'),
+            spec=d.get('meta', {}).get('spec'),
+        )
+        db.session.add(new_device)
+        for short_name, p in d.get('Properties', {}).items():
+            new_property = models.Property(
+                shortName=short_name,
+                minimum=p.get('minimum'),
+                maximum=p.get('maximum'),
+                DeviceID=d.get('ID'),
+            )
+            db.session.add(new_property)
+
+    db.session.commit()
