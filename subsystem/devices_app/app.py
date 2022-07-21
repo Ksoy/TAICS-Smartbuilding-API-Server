@@ -3,7 +3,7 @@ import random
 
 from datetime import datetime
 
-from flask import Blueprint
+from flask import Blueprint, request
 
 from ..db import models
 from ..exceptions import InvalidParameterError, TaicsException
@@ -26,7 +26,7 @@ def devices_list():
 
 @devices_app.route('/<string:device_ids>/value', methods=['GET'], endpoint='get')
 @response_decorator
-def devices_get_value(device_ids: list):
+def devices_get_value(device_ids: str):
     devices = extract_devices(device_ids)
 
     return {
@@ -37,12 +37,30 @@ def devices_get_value(device_ids: list):
 
 @devices_app.route('/<string:device_ids>/value', methods=['POST'], endpoint='post')
 @response_decorator
-def devices_post_value(device_ids: list):
+def devices_post_value(device_ids: str):
+    ids = list(map(lambda x: x.strip(), device_ids.split(',')))
 
-    return device_ids
+    for d in request.json.get('devices', {}):
+        id = d.get('ID')
+        if not id or id not in ids:
+            raise TaicsException([
+                InvalidParameterError(f'{id} is inconsistent')
+            ])
 
 
-def extract_devices(device_ids: list):
+        device_record = models.Device.query.filter_by(ID=id).first()
+        if not device_record:
+            raise TaicsException([
+                InvalidParameterError(f'{id} not found')
+            ])
+
+        for shortName, value in d.get('values', {}).items():
+            logger.info(f'{id}.{shortName}: {value}')
+
+    return request.json
+
+
+def extract_devices(device_ids: str):
     devices = []
     for id in list(map(lambda x: x.strip(), device_ids.split(','))):
         device_record = models.Device.query.filter_by(ID=id).first()
