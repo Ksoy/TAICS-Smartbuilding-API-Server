@@ -14,7 +14,7 @@ ntp_client = ntplib.NTPClient()
 def response_decorator(f):
     def wrap(*arg, **args):
         if config.IS_TESTING:
-            recv_time = get_ntp_tx()
+            recv_time = get_ntp_tx(config.NTP_SERVER1)
 
         try:
             result = f(*arg, **args)
@@ -30,9 +30,9 @@ def response_decorator(f):
             if config.IS_TESTING:
                 result.update({
                     'ntp': {
-                        'ntp_server': config.NTP_SERVER,
+                        'ntp_server': [config.NTP_SERVER1, config.NTP_SERVER2],
                         'api_recv_time': recv_time,
-                        'api_send_time': get_ntp_tx(),
+                        'api_send_time': get_ntp_tx(config.NTP_SERVER2),
                     }
                 })
 
@@ -41,9 +41,9 @@ def response_decorator(f):
     return wrap
 
 
-def get_ntp_tx() -> str:
+def get_ntp_tx(host) -> str:
     try:
-        response = ntp_client.request(config.NTP_SERVER, version=3, timeout=1)
+        response = ntp_client.request(host, version=3, timeout=1)
     except ntplib.NTPException:
         return 'Failed to get ntp server time'
     return str(response.tx_time)

@@ -15,7 +15,8 @@ SECRET_KEY = ''
 DEBUG = False
 
 IS_TESTING = False
-NTP_SERVER = 'time.stdtime.gov.tw'
+NTP_SERVER1 = 'time.stdtime.gov.tw'
+NTP_SERVER2 = 'time.stdtime.gov.tw'
 
 
 def read_config(path: str = f'{BASE_DIR}/.env'):
@@ -38,4 +39,5 @@ def read_config(path: str = f'{BASE_DIR}/.env'):
     set_('DEBUG', bool)
 
     set_('IS_TESTING', bool)
-    set_('NTP_SERVER')
+    set_('NTP_SERVER1')
+    set_('NTP_SERVER2')
