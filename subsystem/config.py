@@ -1,5 +1,6 @@
 import os
 
+from distutils.util import strtobool
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -36,8 +37,8 @@ def read_config(path: str = f'{BASE_DIR}/.env'):
     set_('HOST')
     set_('PORT')
     set_('SECRET_KEY')
-    set_('DEBUG', bool)
+    set_('DEBUG', strtobool)
 
-    set_('IS_TESTING', bool)
+    set_('IS_TESTING', strtobool)
     set_('NTP_SERVER1')
     set_('NTP_SERVER2')
