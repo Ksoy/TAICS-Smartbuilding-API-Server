@@ -35,6 +35,17 @@ def devices_get_value(device_ids: str):
     }
 
 
+@devices_app.route('/<string:device_ids>/property', methods=['GET'], endpoint='get')
+@response_decorator
+def devices_get_value(device_ids: str):
+    devices = extract_devices(device_ids)
+
+    return {
+        'kind': 'Device',
+        'devices': [d.export_properties() for d in devices],
+    }
+
+
 @devices_app.route('/<string:device_ids>/value', methods=['POST'], endpoint='post')
 @response_decorator
 def devices_post_value(device_ids: str):
