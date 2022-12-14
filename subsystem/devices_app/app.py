@@ -42,7 +42,7 @@ def devices_get_properties(device_ids: str):
 
     return {
         'kind': 'Device',
-        'devices': [d.export_properties() for d in devices],
+        'devices': [d.export_property() for d in devices],
     }
 
 

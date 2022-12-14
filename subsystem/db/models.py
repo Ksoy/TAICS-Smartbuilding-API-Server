@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 
 from . import db
 
+from .utils import gen_data
+
 
 class TimestampMixin():
     # Ref: https://myapollo.com.tw/zh-tw/sqlalchemy-mixin-and-custom-base-classes/
@@ -69,7 +71,14 @@ class Device(DictMixin, TimestampMixin, db.Model):
 
     @property
     def values(self) -> dict:
-        return {p.shortName: random.random() for p in self.properties}
+        return {p.shortName: gen_data(p.shortName) for p in self.properties}
+
+    @property
+    def property(self) -> dict:
+        return {
+            p.shortName: {'minimum': p.minimum, 'maximum': p.maximum}
+            for p in self.properties
+        }
 
     def export(self) -> dict:
         return self.to_dict(['ID', 'tag', 'desc', 'type', 'loc', 'meta'])
@@ -77,8 +86,8 @@ class Device(DictMixin, TimestampMixin, db.Model):
     def export_values(self) -> dict:
         return self.to_dict(['ID', 'tag', 'values'])
 
-    def export_properties(self) -> dict:
-        return self.to_dict(['properties'])
+    def export_property(self) -> dict:
+        return self.to_dict(['ID', 'tag', 'property'])
 
 
 class Property(DictMixin, TimestampMixin, db.Model):
