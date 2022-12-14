@@ -35,7 +35,7 @@ def devices_get_value(device_ids: str):
     }
 
 
-@devices_app.route('/<string:device_ids>/property', methods=['GET'], endpoint='get')
+@devices_app.route('/<string:device_ids>/property', methods=['GET'], endpoint='property')
 @response_decorator
 def devices_get_properties(device_ids: str):
     devices = extract_devices(device_ids)
