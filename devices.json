@@ -1,13 +1,13 @@
 [
   {
     "kind": "Device",
-    "ID": "Orchid-001",
-    "tag": "001 蘭花場域",
-    "desc": "第一區的蘭花場域",
-    "type": "Orchid Filed",
+    "ID": "PM-001",
+    "tag": "001 ",
+    "desc": "第一電錶",
+    "type": "Power Meter",
     "loc": {
-      "locName": "東南場",
-      "locDesc": "東南場",
+      "locName": "A1-IT",
+      "locDesc": "A1大樓資訊室",
       "lat": "25.033759",
       "lon": "121.564445",
       "elev": null,
@@ -26,40 +26,15 @@
       "spec": null
     },
     "Properties": {
-      "OrchidSensor-01": {
-      	"minimum": null,
-      	"maximum": null
-      }
-    }
-  },
-  {
-    "kind": "Device",
-    "ID": "Orchid-002",
-    "tag": "002 蘭花場域",
-    "desc": "第二區的蘭花場域",
-    "type": "Orchid Filed",
-    "loc": {
-      "locName": "東北場",
-      "locDesc": "東北場",
-      "lat": "25.033760",
-      "lon": "121.564444",
-      "elev": null,
-      "roomTag": null,
-      "floorName": null,
-      "spaceName": null
-    },
-    "meta":
-    {
-      "vendor": null,
-      "model": null,
-      "SN": null,
-      "fmwVer": null,
-      "appVer": null,
-      "URL": null,
-      "spec": null
-    },
-    "Properties": {
-      "OrchidSensor-02": {
+      "V": {
+        "minimum": 107,
+        "maximum": 113
+      },
+      "I": {
+        "minimum": 3,
+        "maximum": 5
+      },
+      "pwrDwn": {
       	"minimum": null,
       	"maximum": null
       }
