@@ -16,22 +16,22 @@ logger = logging.getLogger(__name__)
 @devices_app.route('/', methods=['GET'], endpoint='list')
 @response_decorator
 def devices_list():
-    device_records = models.Device.query.all()
+    device_records = models.Device.query
+
+    offset = request.args.get('offset')
+    count = request.args.get('count')
+    if offset or count:
+        offset = int(offset) if offset else 0
+        count = int(count) if count else 25
+        device_records = (
+            device_records.order_by(models.Device.ID)
+                          .offset(count * offset)
+                          .limit(25)
+        )
 
     return {
         'kind': 'Collection',
-        'devices': [d.export() for d in device_records],
-    }
-
-
-@devices_app.route('/<string:device_ids>/value', methods=['GET'], endpoint='get')
-@response_decorator
-def devices_get_value(device_ids: str):
-    devices = extract_devices(device_ids)
-
-    return {
-        'kind': 'Device',
-        'devices': [d.export_values() for d in devices],
+        'devices': [d.export() for d in device_records.all()],
     }
 
 
@@ -43,6 +43,17 @@ def devices_get_properties(device_ids: str):
     return {
         'kind': 'Device',
         'devices': [d.export_property() for d in devices],
+    }
+
+
+@devices_app.route('/<string:device_ids>/value', methods=['GET'], endpoint='get')
+@response_decorator
+def devices_get_value(device_ids: str):
+    devices = extract_devices(device_ids)
+
+    return {
+        'kind': 'Device',
+        'devices': [d.export_values() for d in devices],
     }
 
 
