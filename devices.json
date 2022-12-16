@@ -1,7 +1,7 @@
 [
   {
     "kind": "Device",
-    "ID": "PM-001",
+    "ID": "PM-0001",
     "tag": "001 ",
     "desc": "第一電錶",
     "type": "Power Meter",

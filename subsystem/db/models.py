@@ -54,7 +54,7 @@ class Device(DictMixin, TimestampMixin, db.Model):
     URL = db.Column(db.String(100), nullable=True)
     spec = db.Column(db.Text, nullable=True)
 
-    properties = db.relationship(
+    propertys = db.relationship(
         'Property',
         back_populates='device',
         cascade='all, delete-orphan',
@@ -72,13 +72,13 @@ class Device(DictMixin, TimestampMixin, db.Model):
 
     @property
     def values(self) -> dict:
-        return {p.shortName: gen_data(p.shortName) for p in self.properties}
+        return {p.shortName: gen_data(p.shortName) for p in self.propertys}
 
     @property
-    def property(self) -> dict:
+    def properties(self) -> dict:
         return {
             p.shortName: {'minimum': p.minimum, 'maximum': p.maximum}
-            for p in self.properties
+            for p in self.propertys
         }
 
     def export(self) -> dict:
@@ -88,7 +88,7 @@ class Device(DictMixin, TimestampMixin, db.Model):
         return self.to_dict(['ID', 'tag', 'values'])
 
     def export_property(self) -> dict:
-        return self.to_dict(['ID', 'tag', 'property'])
+        return self.to_dict(['ID', 'tag', 'properties'])
 
 
 class Property(DictMixin, TimestampMixin, db.Model):
@@ -100,7 +100,7 @@ class Property(DictMixin, TimestampMixin, db.Model):
     maximum = db.Column(db.Float, nullable=True)
 
     DeviceID = db.Column(db.String(20), db.ForeignKey('device.ID'))
-    device = db.relationship('Device', back_populates='properties')
+    device = db.relationship('Device', back_populates='propertys')
 
     values = db.relationship(
         'Value',
