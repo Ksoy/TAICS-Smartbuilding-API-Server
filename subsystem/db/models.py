@@ -29,7 +29,7 @@ class DictMixin():
 
 class Device(DictMixin, TimestampMixin, db.Model):
     ID = db.Column(db.String(20), primary_key=True)
-    kind = db.Column(db.String(20), default='Devices')
+    kind = db.Column(db.String(20), default='Device')
     tag = db.Column(db.Text)
     desc = db.Column(db.Text)
     type = db.Column(db.String(100))
@@ -39,10 +39,11 @@ class Device(DictMixin, TimestampMixin, db.Model):
     locDesc = db.Column(db.Text, nullable=True)
     lat = db.Column(db.String(11), nullable=True)
     lon = db.Column(db.String(11), nullable=True)
+    hgt = db.Column(db.String(11), nullable=True)
     elev = db.Column(db.String(100), nullable=True)
     roomTag = db.Column(db.String(100), nullable=True)
-    floorTag = db.Column(db.String(100), nullable=True)
-    spaceTag = db.Column(db.String(100), nullable=True)
+    floorName = db.Column(db.String(100), nullable=True)
+    spaceName= db.Column(db.String(100), nullable=True)
 
     # meta
     vendor = db.Column(db.String(100), nullable=True)
@@ -62,8 +63,8 @@ class Device(DictMixin, TimestampMixin, db.Model):
 
     @property
     def loc(self) -> dict:
-        return self.to_dict(['locName', 'locDesc', 'lat', 'lon', 'refElev',
-                             'elev', 'roomTag', 'floorTag', 'spaceTag'])
+        return self.to_dict(['locName', 'locDesc', 'lat', 'lon', 'hgt', 'refElev',
+                             'elev', 'roomTag', 'floorName', 'spaceName'])
 
     @property
     def meta(self) -> dict:
@@ -81,7 +82,7 @@ class Device(DictMixin, TimestampMixin, db.Model):
         }
 
     def export(self) -> dict:
-        return self.to_dict(['ID', 'tag', 'desc', 'type', 'loc', 'meta'])
+        return self.to_dict(['kind', 'ID', 'tag', 'desc', 'type', 'loc', 'meta'])
 
     def export_values(self) -> dict:
         return self.to_dict(['ID', 'tag', 'values'])
