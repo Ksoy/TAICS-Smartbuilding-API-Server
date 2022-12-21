@@ -55,7 +55,11 @@ class EventTrigger(Process):
         return ret
 
     def run(self):
-        requests.post(urljoin(self.msihost, 'event'), json={
+        print('Receive event trigger, send requests.')
+        res = requests.post(urljoin(self.msihost, 'event'), json={
+            'kind': 'Event',
+            'self': '',
+            'timestamp': datetime.now(timezone('Asia/Taipei')).isoformat(),
             'esiID': 'ESI-0001',
             'esiName': 'ESI-system',
             'events': [
@@ -66,7 +70,10 @@ class EventTrigger(Process):
                     'level': 1,
                     'time': datetime.now(timezone('Asia/Taipei')).isoformat(),
                     'srcID': 'PM-0001',
+                    'msg': 'something wrong',
                 },
             ],
         })
 
+        if res.status_code != 200:
+            print(res.text)
