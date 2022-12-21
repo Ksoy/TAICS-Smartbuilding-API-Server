@@ -13,3 +13,5 @@ flake8~=3.9.1
 
 # timezone library
 pytz~=2022.1
+
+requests

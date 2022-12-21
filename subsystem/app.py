@@ -4,9 +4,10 @@ from flask import Flask
 from flask import jsonify
 
 from . import config
-from .devices_app import devices_app
 from .db import db
 from .db import models
+from .devices_app import devices_app
+from .event_app import event_app
 
 
 def start_server():
@@ -19,6 +20,7 @@ def start_server():
         return res
 
     app.register_blueprint(devices_app, url_prefix='/devices')
+    app.register_blueprint(event_app, url_prefix='/event')
 
     # Configure Flask-SQLAlchemy
     # Ref: https://tinyurl.com/26dbers4
