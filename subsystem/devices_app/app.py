@@ -57,7 +57,7 @@ def devices_get_value(device_ids: str):
         t = d.to_dict(['ID', 'tag'])
         t.update({
             'values': {
-                p.shortName: p.last_value() for p in d.propertys
+                p.shortName: last_value(p.id) for p in d.propertys
             }
         })
         devices.append(t)
@@ -103,3 +103,26 @@ def extract_devices(device_ids: str):
         devices.append(device_record)
 
     return devices
+
+
+def last_value(property_id):
+    p = models.Property.query.filter_by(id=property_id).first()
+    if not p:
+        return None
+
+    last_record = (
+        p.values
+         .order_by(models.Value.id.asc())
+         .limit(1)
+         .first()
+    )
+
+    if last_record:
+        if p.type.lower() == 'float':
+            return float(last_record.value)
+        elif p.type.lower() in ('int', 'integer'):
+            return int(last_record.value)
+        return last_record.value
+    else:
+        return None
+

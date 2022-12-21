@@ -3,7 +3,6 @@ import random
 from sqlalchemy.sql import func
 
 from . import db
-from .utils import gen_data
 
 
 class TimestampMixin():
@@ -82,6 +81,7 @@ class Property(DictMixin, TimestampMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     shortName = db.Column(db.String(20))
+    type = db.Column(db.String(20))
     minimum = db.Column(db.Float, nullable=True)
     maximum = db.Column(db.Float, nullable=True)
 
@@ -95,14 +95,6 @@ class Property(DictMixin, TimestampMixin, db.Model):
         lazy='dynamic',
         passive_deletes=True
     )
-
-    def last_value(self):
-        last_record = self.values.order_by(Value.id.asc()).limit(1).first()
-
-        if last_record:
-            return last_record.value
-        else:
-            return None
 
 
 class Value(DictMixin, TimestampMixin, db.Model):

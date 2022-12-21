@@ -28,15 +28,19 @@
     },
     "Properties": {
       "V": {
+        "type": "float",
         "minimum": 107,
         "maximum": 113,
         "value": 111.1
       },
       "I": {
+        "type": "float",
         "minimum": 3,
-        "maximum": 5
+        "maximum": 5,
+	"value": 4.4
       },
       "pwrDwn": {
+        "type": "string",
         "minimum": null,
         "maximum": null,
         "value": "UP"

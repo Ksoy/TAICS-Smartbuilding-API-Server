@@ -68,6 +68,7 @@ def init_db():
         for short_name, p in d.get('Properties', {}).items():
             new_property = models.Property(
                 shortName=short_name,
+                type=p.get('type', 'string'),
                 minimum=p.get('minimum'),
                 maximum=p.get('maximum'),
                 DeviceID=d.get('ID'),
