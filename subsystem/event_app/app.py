@@ -6,8 +6,10 @@ from multiprocessing import Process
 from urllib.parse import urljoin
 
 import requests
+import validators
 
 from flask import Blueprint, request
+from pytz import timezone
 
 from ..db import models
 from ..exceptions import InvalidParameterError, TaicsException
@@ -20,26 +22,15 @@ logger = logging.getLogger(__name__)
 @event_app.route('/trigger', methods=['POST'], endpoint='post')
 @response_decorator
 def event_trigger():
-    msihost = request.json.get('msihost')
+    msihost = request.json.get('msihost', '')
 
-    if not msihost:
+    if not validators.url(msihost):
         return {
             'kind': 'Error',
             'errors': [
                 {
                     'code': 'INVALID_PARAMETER',
-                    'message': 'msihost not given',
-                },
-            ],
-        }
-
-    if not msihost.endswith('/'):
-        return {
-            'kind': 'Error',
-            'errors': [
-                {
-                    'code': 'INVALID_PARAMETER',
-                    'message': 'msihost should end with \'/\'',
+                    'message': 'msihost is not valid',
                 },
             ],
         }
@@ -64,7 +55,7 @@ class EventTrigger(Process):
         return ret
 
     def run(self):
-        r = request.post(urljoin(self.msihost, 'event'), json={
+        requests.post(urljoin(self.msihost, 'event'), json={
             'esiID': 'ESI-0001',
             'esiName': 'ESI-system',
             'events': [
@@ -78,3 +69,4 @@ class EventTrigger(Process):
                 },
             ],
         })
+
