@@ -29,15 +29,17 @@
     "Properties": {
       "V": {
         "minimum": 107,
-        "maximum": 113
+        "maximum": 113,
+        "value": 111.1
       },
       "I": {
         "minimum": 3,
         "maximum": 5
       },
       "pwrDwn": {
-      	"minimum": null,
-      	"maximum": null
+        "minimum": null,
+        "maximum": null,
+        "value": "UP"
       }
     }
   }

@@ -92,15 +92,17 @@ class Property(DictMixin, TimestampMixin, db.Model):
         'Value',
         back_populates='property',
         cascade='all, delete-orphan',
+        lazy='dynamic',
         passive_deletes=True
     )
 
     def last_value(self):
-        last_record = self.values.order_by(id.asc()).limit(1)
-        if self.values:
+        last_record = self.values.order_by(Value.id.asc()).limit(1).first()
+
+        if last_record:
             return last_record.value
         else:
-            return gen_data(self.shortName)
+            return None
 
 
 class Value(DictMixin, TimestampMixin, db.Model):

@@ -64,6 +64,7 @@ def init_db():
             spec=d.get('meta', {}).get('spec'),
         )
         db.session.add(new_device)
+        db.session.commit()
         for short_name, p in d.get('Properties', {}).items():
             new_property = models.Property(
                 shortName=short_name,
@@ -72,5 +73,12 @@ def init_db():
                 DeviceID=d.get('ID'),
             )
             db.session.add(new_property)
+            db.session.commit()
+            if 'value' in p:
+                new_value = models.Value(
+                    pid=new_property.id,
+                    value = p.get('value')
+                )
+                db.session.add(new_value)
 
     db.session.commit()
