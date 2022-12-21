@@ -3,7 +3,6 @@ import random
 from sqlalchemy.sql import func
 
 from . import db
-
 from .utils import gen_data
 
 
@@ -71,10 +70,6 @@ class Device(DictMixin, TimestampMixin, db.Model):
         return self.to_dict(['vendor', 'model', 'SN', 'fmwVer', 'appVer', 'URL', 'spec'])
 
     @property
-    def values(self) -> dict:
-        return {p.shortName: gen_data(p.shortName) for p in self.propertys}
-
-    @property
     def properties(self) -> dict:
         return {
             p.shortName: {'minimum': p.minimum, 'maximum': p.maximum}
@@ -99,6 +94,13 @@ class Property(DictMixin, TimestampMixin, db.Model):
         cascade='all, delete-orphan',
         passive_deletes=True
     )
+
+    def last_value(self):
+        last_record = self.values.order_by(id.asc()).limit(1)
+        if self.values:
+            return last_record.value
+        else:
+            return gen_data(self.shortName)
 
 
 class Value(DictMixin, TimestampMixin, db.Model):

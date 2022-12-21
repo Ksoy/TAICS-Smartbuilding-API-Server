@@ -32,7 +32,7 @@ def devices_list():
     return {
         'kind': 'Collection',
         'devices': [
-            d.to_dict(['kind', 'ID', 'tag', 'desc', 'type', 'loc', 'meta']) 
+            d.to_dict(['kind', 'ID', 'tag', 'desc', 'type', 'loc', 'meta'])
             for d in device_records.all()
         ],
     }
@@ -52,11 +52,18 @@ def devices_get_properties(device_ids: str):
 @devices_app.route('/<string:device_ids>/value', methods=['GET'], endpoint='get')
 @response_decorator
 def devices_get_value(device_ids: str):
-    devices = extract_devices(device_ids)
-
+    devices = []
+    for d in extract_devices(device_ids):
+        t = d.to_dict(['ID', 'tag'])
+        t.update({
+            'values': {
+                p.shortName: p.last_value() for p in d.propertys
+            }
+        })
+        devices.append(t)
     return {
         'kind': 'Device',
-        'devices': [d.to_dict(['ID', 'tag', 'values']) for d in devices],
+        'devices': devices,
     }
 
 
