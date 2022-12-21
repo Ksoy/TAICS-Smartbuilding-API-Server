@@ -81,15 +81,6 @@ class Device(DictMixin, TimestampMixin, db.Model):
             for p in self.propertys
         }
 
-    def export(self) -> dict:
-        return self.to_dict(['kind', 'ID', 'tag', 'desc', 'type', 'loc', 'meta'])
-
-    def export_values(self) -> dict:
-        return self.to_dict(['ID', 'tag', 'values'])
-
-    def export_property(self) -> dict:
-        return self.to_dict(['ID', 'tag', 'properties'])
-
 
 class Property(DictMixin, TimestampMixin, db.Model):
     __table_args__ = {'sqlite_autoincrement': True}

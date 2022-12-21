@@ -31,7 +31,10 @@ def devices_list():
 
     return {
         'kind': 'Collection',
-        'devices': [d.export() for d in device_records.all()],
+        'devices': [
+            d.to_dict(['kind', 'ID', 'tag', 'desc', 'type', 'loc', 'meta']) 
+            for d in device_records.all()
+        ],
     }
 
 
@@ -42,7 +45,7 @@ def devices_get_properties(device_ids: str):
 
     return {
         'kind': 'Device',
-        'devices': [d.export_property() for d in devices],
+        'devices': [d.to_dict(['ID', 'tag', 'properties']) for d in devices],
     }
 
 
@@ -53,7 +56,7 @@ def devices_get_value(device_ids: str):
 
     return {
         'kind': 'Device',
-        'devices': [d.export_values() for d in devices],
+        'devices': [d.to_dict(['ID', 'tag', 'values']) for d in devices],
     }
 
 
