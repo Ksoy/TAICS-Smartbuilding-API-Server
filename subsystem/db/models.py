@@ -101,6 +101,6 @@ class Value(DictMixin, TimestampMixin, db.Model):
     __table_args__ = {'sqlite_autoincrement': True}
 
     id = db.Column(db.Integer, primary_key=True)
-    pid = db.Column(db.Integer, db.ForeignKey('property.id'))
+    PropertyID = db.Column(db.Integer, db.ForeignKey('property.id'))
     value = db.Column(db.Text)
     property = db.relationship('Property', back_populates='values')
