@@ -112,7 +112,7 @@ def last_value(property_id):
 
     last_record = (
         p.values
-         .order_by(models.Value.id.asc())
+         .order_by(models.Value.id.desc())
          .limit(1)
          .first()
     )
