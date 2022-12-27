@@ -5,7 +5,7 @@ from datetime import datetime
 
 from flask import Blueprint, request
 
-from ..db import models
+from ..db import db, models
 from ..exceptions import InvalidParameterError, TaicsException
 from ..utils import response_decorator
 
@@ -72,7 +72,7 @@ def devices_get_value(device_ids: str):
 def devices_post_value(device_ids: str):
     ids = list(map(lambda x: x.strip(), device_ids.split(',')))
 
-    for d in request.json.get('devices', {}):
+    for d in request.json.get('devices', []):
         id = d.get('ID')
         if not id or id not in ids:
             raise TaicsException([
@@ -87,7 +87,13 @@ def devices_post_value(device_ids: str):
             ])
 
         for shortName, value in d.get('values', {}).items():
-            logger.info(f'{id}.{shortName}: {value}')
+            property_record = models.Property.query.filter_by(DeviceID=id, shortName=shortName).first()
+            if not property_record:
+                raise TaicsException([InvalidParameterError(f'Property {shortName} not found')])
+
+            new_value = models.Value(PropertyID=property_record.id, value=value)
+            db.session.add(new_value)
+            db.session.commit()
 
     return request.json
 
