@@ -73,7 +73,7 @@ def init_db():
                 type=p.get('type', 'string'),
                 minimum=p.get('minimum'),
                 maximum=p.get('maximum'),
-                DeviceID=d.get('ID'),
+                device_id=d.get('ID'),
             )
             db.session.add(new_property)
             db.session.commit()
