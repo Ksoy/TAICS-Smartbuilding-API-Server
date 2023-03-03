@@ -2,7 +2,7 @@
   {
     "kind": "Device",
     "ID": "PM-0001",
-    "tag": "001 ",
+    "tag": "001",
     "desc": "第一電錶",
     "type": "Power Meter",
     "loc": {
@@ -30,21 +30,23 @@
       "V": {
         "type": "float",
         "minimum": 107,
-        "maximum": 113,
-        "value": 111.1
+        "maximum": 113
       },
       "I": {
         "type": "float",
         "minimum": 3,
-        "maximum": 5,
-	"value": 4.4
+        "maximum": 5
       },
       "pwrDwn": {
         "type": "string",
         "minimum": null,
-        "maximum": null,
-        "value": "UP"
+        "maximum": null
       }
+    },
+    "Values": {
+      "V": 111.1,
+      "I": 4.4,
+      "pwrDwn": "UP"
     }
   }
 ]

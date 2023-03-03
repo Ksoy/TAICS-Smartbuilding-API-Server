@@ -55,6 +55,7 @@ def init_db():
         db.session.add(new_device)
         db.session.commit()
 
+        values = d.get('Values', {})
         for short_name, p in d.get('Properties', {}).items():
             new_property = models.Property(
                 shortName=short_name,
@@ -66,10 +67,10 @@ def init_db():
             db.session.add(new_property)
             db.session.commit()
 
-            if 'value' in p:
+            if short_name in values:
                 new_value = models.Value(
                     PropertyID=new_property.id,
-                    value=p.get('value')
+                    value=values.get(short_name)
                 )
                 db.session.add(new_value)
                 db.session.commit()
