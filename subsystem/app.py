@@ -80,7 +80,7 @@ def init_db():
             if 'value' in p:
                 new_value = models.Value(
                     PropertyID=new_property.id,
-                    value = p.get('value')
+                    value=p.get('value')
                 )
                 db.session.add(new_value)
 

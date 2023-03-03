@@ -1,7 +1,4 @@
 import logging
-import random
-
-from datetime import datetime
 
 from flask import Blueprint, request
 
@@ -79,7 +76,6 @@ def devices_post_value(device_ids: str):
                 InvalidParameterError(f'{id} is inconsistent')
             ])
 
-
         device_record = models.Device.query.filter_by(ID=id).first()
         if not device_record:
             raise TaicsException([
@@ -87,9 +83,15 @@ def devices_post_value(device_ids: str):
             ])
 
         for shortName, value in d.get('values', {}).items():
-            property_record = models.Property.query.filter_by(DeviceID=id, shortName=shortName).first()
+            property_record = (
+                models.Property
+                      .query
+                      .filter_by(DeviceID=id, shortName=shortName)
+                      .first()
+            )
             if not property_record:
-                raise TaicsException([InvalidParameterError(f'Property {shortName} not found')])
+                msg = f'Property {shortName} not found'
+                raise TaicsException([InvalidParameterError(msg)])
 
             new_value = models.Value(PropertyID=property_record.id, value=value)
             db.session.add(new_value)
@@ -131,4 +133,3 @@ def last_value(property_id):
         return last_record.value
     else:
         return None
-

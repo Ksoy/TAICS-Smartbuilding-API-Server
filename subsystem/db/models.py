@@ -1,5 +1,3 @@
-import random
-
 from sqlalchemy.sql import func
 
 from . import db
@@ -41,7 +39,7 @@ class Device(DictMixin, TimestampMixin, db.Model):
     elev = db.Column(db.String(100), nullable=True)
     roomTag = db.Column(db.String(100), nullable=True)
     floorName = db.Column(db.String(100), nullable=True)
-    spaceName= db.Column(db.String(100), nullable=True)
+    spaceName = db.Column(db.String(100), nullable=True)
 
     # meta
     vendor = db.Column(db.String(100), nullable=True)

@@ -1,5 +1,4 @@
 import logging
-import random
 
 from datetime import datetime
 from multiprocessing import Process
@@ -11,8 +10,6 @@ import validators
 from flask import Blueprint, request
 from pytz import timezone
 
-from ..db import models
-from ..exceptions import InvalidParameterError, TaicsException
 from ..utils import response_decorator
 
 event_app = Blueprint('event', __name__)

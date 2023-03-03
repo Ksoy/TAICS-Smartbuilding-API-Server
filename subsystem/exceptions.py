@@ -26,4 +26,3 @@ class TaicsException(Exception):
             "kind": "Error",
             "errors": [e.to_dict() for e in self.errors],
         }
-
