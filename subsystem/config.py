@@ -15,10 +15,6 @@ SECRET_KEY = ''
 
 DEBUG = False
 
-IS_TESTING = False
-NTP_SERVER1 = 'time.stdtime.gov.tw'
-NTP_SERVER2 = 'time.stdtime.gov.tw'
-
 
 def read_config(path: str = f'{BASE_DIR}/.env'):
     if not path or not os.path.isfile(path):
@@ -38,7 +34,3 @@ def read_config(path: str = f'{BASE_DIR}/.env'):
     set_('PORT')
     set_('SECRET_KEY')
     set_('DEBUG', strtobool)
-
-    set_('IS_TESTING', strtobool)
-    set_('NTP_SERVER1')
-    set_('NTP_SERVER2')
