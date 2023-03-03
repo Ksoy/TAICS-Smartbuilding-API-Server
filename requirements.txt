@@ -2,6 +2,9 @@
 flask~=2.0.3
 flask_sqlalchemy~=2.5.1
 
+# SQLAlchemy Database ORM
+SQLAlchemy~=1.4.0
+
 # Load enviroment setting library
 python-dotenv~=0.20.0
 
