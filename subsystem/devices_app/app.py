@@ -86,7 +86,7 @@ def devices_post_value(device_ids: str):
             property_record = (
                 models.Property
                       .query
-                      .filter_by(DeviceID=id, shortName=shortName)
+                      .filter_by(device_id=id, shortName=shortName)
                       .first()
             )
             if not property_record:

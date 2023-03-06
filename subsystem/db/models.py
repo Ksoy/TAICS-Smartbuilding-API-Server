@@ -83,7 +83,7 @@ class Property(DictMixin, TimestampMixin, db.Model):
     minimum = db.Column(db.Float, nullable=True)
     maximum = db.Column(db.Float, nullable=True)
 
-    DeviceID = db.Column(db.String(20), db.ForeignKey('device.ID'))
+    device_id = db.Column(db.String(20), db.ForeignKey('device.ID'))
     device = db.relationship('Device', back_populates='propertys')
 
     values = db.relationship(
